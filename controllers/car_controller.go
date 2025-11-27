@@ -11,6 +11,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// CreateCar godoc
+// @Summary Create a new car
+// @Description Create a new car entry
+// @Tags cars
+// @Accept json
+// @Produce json
+// @Param car body models.Car true "Car info"
+// @Success 201 {object} models.Car
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /cars [post]
 func CreateCar(c *gin.Context) {
 	var car models.Car
 	if err := c.BindJSON(&car); err != nil {
@@ -26,6 +37,15 @@ func CreateCar(c *gin.Context) {
 	c.JSON(http.StatusCreated, car)
 }
 
+// GetCars godoc
+// @Summary List all cars
+// @Description Get all cars
+// @Tags cars
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Car
+// @Failure 500 {object} map[string]string
+// @Router /cars [get]
 func GetCars(c *gin.Context) {
 	var cars []models.Car
 	cursor, err := database.CarCollection.Find(context.TODO(), bson.M{})
@@ -46,6 +66,17 @@ func GetCars(c *gin.Context) {
 	c.JSON(http.StatusOK, cars)
 }
 
+// GetCarByID godoc
+// @Summary Get a car by ID
+// @Description Get a single car by its ID
+// @Tags cars
+// @Accept json
+// @Produce json
+// @Param id path string true "Car ID"
+// @Success 200 {object} models.Car
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /cars/{id} [get]
 func GetCarByID(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
@@ -62,6 +93,18 @@ func GetCarByID(c *gin.Context) {
 	c.JSON(http.StatusOK, car)
 }
 
+// UpdateCar godoc
+// @Summary Update a car
+// @Description Update a car by ID
+// @Tags cars
+// @Accept json
+// @Produce json
+// @Param id path string true "Car ID"
+// @Param car body models.Car true "Car info"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /cars/{id} [put]
 func UpdateCar(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {
@@ -82,6 +125,17 @@ func UpdateCar(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Car updated successfully"})
 }
 
+// DeleteCar godoc
+// @Summary Delete a car
+// @Description Delete a car by ID
+// @Tags cars
+// @Accept json
+// @Produce json
+// @Param id path string true "Car ID"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /cars/{id} [delete]
 func DeleteCar(c *gin.Context) {
 	id, err := primitive.ObjectIDFromHex(c.Param("id"))
 	if err != nil {

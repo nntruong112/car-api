@@ -1,14 +1,12 @@
-version: '3.8'
-
 services:
   mongo:
     image: mongo:latest
     container_name: mongo-car-api
     restart: always
     ports:
-      - "27017:27017"
+      - "27017:27017"  # Map external 27018 to internal 27017
     volumes:
-      - mongo-data:/data/db  # Use named volume
+      - mongo-data:/data/db
 
   app:
     build: .
@@ -17,10 +15,9 @@ services:
     depends_on:
       - mongo
     environment:
-      MONGO_URI: "mongodb://mongo:27017"
+      MONGO_URI: "mongodb://mongo:27017"  # Use service name inside Docker
     ports:
       - "8080:8080"
 
-# ✅ Define the volume here
 volumes:
   mongo-data:
